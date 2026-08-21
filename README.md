@@ -1,7 +1,7 @@
 # Swifty Companion
 
 <!-- Add image or use below -->
- <img src="https://capsule-render.vercel.app/api?type=venom&height=300&color=0:61baf8,100:256082&text=Swifty Companion&fontColor=ae3855&animation=fadeIn&textBg=false&stroke=e995a4&strokeWidth=1&desc=Short%20description&descSize=18&descAlignY=66" width="100%" />
+<img src="https://capsule-render.vercel.app/api?type=venom&height=300&color=0:61baf8,100:256082&text=Swifty%20Companion&fontColor=ae3855&animation=fadeIn&textBg=false&stroke=e995a4&strokeWidth=1&desc=Short%20description&descSize=18&descAlignY=66" width="100%" />
 <!-- <img src="" width="100%" /> -->
 
 <div align="center">
