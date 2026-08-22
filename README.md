@@ -105,6 +105,11 @@
 
 ## Technical Restrictions
 
+### Credentials
+
+The Android convention would be `local.properties`, which Gradle reads natively and which is git-ignored by default.
+In this project, the subject requires a `.env` file instead, so `.env` is parsed at build time in `app/build.gradle.kts` and exposed through `BuildConfig`. The runtime path stays the standard one.
+
 ## Getting Started
 
 ### Prerequisites
