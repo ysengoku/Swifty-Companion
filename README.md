@@ -58,49 +58,62 @@
 
 <!-- Use utils/TECH_STACK_LIST.md -->
 
-**Languages:**   
+## Tech Stack
+
+**Languages:**
 
 <div>   
-  <img src="https://img.shields.io/badge/JavaScript-333333?style=for-the-badge&logo=javascript&logoColor=F7DF1E" />
+  <img src="https://img.shields.io/badge/Kotlin-333333?style=for-the-badge&logo=kotlin&logoColor=37F52FF" />
+</div>
+
+Google's recommended language for Android since 2019.
+Null safety and coroutines make asynchronous code shorter and safer
+than the Java equivalent.
+<br />
+
+
+**Frameworks & Libraries:**
+
+<div>
+  <img src="https://img.shields.io/badge/Jetpack_Compose-333333?style=for-the-badge&logo=jetpackcompose&logoColor=4285F4" />
+  <img src="https://img.shields.io/badge/Retrofit-333333?style=for-the-badge&logo=square&logoColor=FFFFFF" />
+  <img src="https://img.shields.io/badge/OkHttp-333333?style=for-the-badge&logo=square&logoColor=FFFFFF" />
+  <img src="https://img.shields.io/badge/Coil-333333?style=for-the-badge&logo=kotlin&logoColor=7F52FF" />
+</div>
+
+- **Jetpack Compose** is a declarative UI toolkit and part of AndroidX. It satisfies
+the subject's requirement for a flexible layout technique: layouts adapt to screen
+size without separate XML files per configuration. **Navigation Compose** handles
+the two required views and the back stack.
+
+- **Retrofit** is the HTTP client. Android has no usable built-in one, so writing
+against `HttpURLConnection` would mean handling threading, error mapping and JSON
+parsing by hand. Its Gson converter maps the 42 API's responses onto Kotlin data
+classes. **OkHttp** is Retrofit's underlying engine, declared explicitly here
+because the bearer token is attached through a custom interceptor.
+
+- **Coil** loads profile pictures, handling download, caching and lifecycle-aware
+cancellation.
+<br />
+
+**API:**
+
+<div>
+  <img src="https://img.shields.io/badge/42_Intra_API-333333?style=for-the-badge&logo=42&logoColor=FFFFFF" />
+  <img src="https://img.shields.io/badge/OAuth_2.0-333333?style=for-the-badge&logo=auth0&logoColor=EB5424" />
 </div>
 <br />
 
-**Frameworks & Libraries:**   
-
+**Tools:**
 <div>
-  <img src="https://img.shields.io/badge/Vue.js-333333?style=for-the-badge&logo=vuedotjs&logoColor=#4FC08D" />
+  <img src="https://img.shields.io/badge/Android_Studio-333333?style=for-the-badge&logo=androidstudio&logoColor=3DDC84" />
+  <img src="https://img.shields.io/badge/Gradle-333333?style=for-the-badge&logo=gradle&logoColor=02303A" />
 </div>
 <br />
 
-**Database:**   
-
+**Development Environment:**
 <div>
-  <img src="https://img.shields.io/badge/PostgreSQL-333333?style=for-the-badge&logo=postgresql&logoColor=4169E1&logoSize=auto" />
-</div>
-<br />
-
-**Tools:**   
-<div>
-  <img src="https://img.shields.io/badge/Vite-333333?style=for-the-badge&logo=vite&logoColor=646CFF"/>
-  <img src="https://img.shields.io/badge/GitHub_Actions-333333?style=for-the-badge&logo=github-actions&logoColor=2088FF" />
-</div>
-<br />
-
-**Infrastructure:**   
-<div>
-  <img src="https://img.shields.io/badge/Docker-333333?style=for-the-badge&logo=docker&logoColor=2CA5E0" />
-  <img src="  https://img.shields.io/badge/Docker%20Compose-333333?style=for-the-badge&logo=docker&logoColor=2496ED" />
-  <img src="https://img.shields.io/badge/nginx-333333?style=for-the-badge&logo=nginx&logoColor=009639" />
-</div>
-<br />
-
-**Development Environment:**   
-<div>
-  <img src="https://img.shields.io/badge/Ubuntu_22.04_LTS-333333?style=for-the-badge&logo=ubuntu&logoColor=E95420" />
-  <img src="https://img.shields.io/badge/macOS_26_Tahoe-333333?style=for-the-badge&logo=apple&logoColor=F0F0F0" />
-  <img src="https://img.shields.io/badge/Google%20Chrome_150-333333?style=for-the-badge&logo=GoogleChrome&logoColor=4285F4"/>
-  <img src="https://img.shields.io/badge/Brave-333333?style=for-the-badge&logo=Brave&logoColor=FB542B"/>
-  <img src="https://img.shields.io/badge/Firefox_148-333333?style=for-the-badge&logo=firefoxbrowser&logoColor=FF7139"/>
+  <img src="https://img.shields.io/badge/Android_Emulator_API_37-333333?style=for-the-badge&logo=android&logoColor=3DDC84" />
 </div>
 
 ## Technical Restrictions
