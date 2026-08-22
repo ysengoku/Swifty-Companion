@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.swifty_companion"
+    namespace = "dev.ysengoku.swiftycompanion"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.example.swifty_companion"
+        applicationId = "dev.ysengoku.swiftycompanion"
         minSdk = 26
         targetSdk = 37
         versionCode = 1

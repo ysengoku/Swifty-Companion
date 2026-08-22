@@ -1,4 +1,4 @@
-package com.example.swifty_companion
+package dev.ysengoku.swiftycompanion
 
 import org.junit.Test
 

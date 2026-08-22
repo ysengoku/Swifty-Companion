@@ -1,4 +1,4 @@
-package com.example.swifty_companion.ui.theme
+package dev.ysengoku.swiftycompanion.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

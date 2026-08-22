@@ -1,4 +1,4 @@
-package com.example.swifty_companion.ui.theme
+package dev.ysengoku.swiftycompanion.ui.theme
 
 import android.app.Activity
 import android.os.Build
