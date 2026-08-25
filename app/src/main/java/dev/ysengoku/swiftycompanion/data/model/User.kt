@@ -52,7 +52,8 @@ data class CursusUser(
     val grade: String?,
     val level: Float,
     val cursus: Cursus,
-    val skills: List<Skill>
+    val skills: List<Skill>,
+    @SerializedName("begin_at") val beginAt: String
 )
 
 data class Cursus(
