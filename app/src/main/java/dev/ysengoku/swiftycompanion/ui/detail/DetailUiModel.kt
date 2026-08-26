@@ -36,7 +36,6 @@ data class ProjectUi (
     // A project belongs to exactly one cursus, see ProjectUser.cursusIds
     val cursusId: Int,
     val name: String,
-    // Only FINISHED projects are mapped, so these are never null in practice
     val finalMark: Int,
     val validated: Boolean,
 )

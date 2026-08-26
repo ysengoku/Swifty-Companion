@@ -35,6 +35,6 @@ val Typography = Typography(
     */
 )
 
-val Asimovian = FontFamily(
-    Font(R.font.asimovian_regular)
+val ZenLoop = FontFamily(
+    Font(R.font.zen_loop_regular)
 )

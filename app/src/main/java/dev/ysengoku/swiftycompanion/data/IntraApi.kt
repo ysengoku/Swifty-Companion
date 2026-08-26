@@ -2,6 +2,7 @@ package dev.ysengoku.swiftycompanion.data
 
 import dev.ysengoku.swiftycompanion.data.model.User
 import okhttp3.Interceptor
+import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,7 +21,7 @@ private val authInterceptor = Interceptor { chain ->
 
     val response = chain.proceed(request)
 
-    if (response.code == 401) {
+    if (response.code == 401 || response.code == 403) {
         response.close()
         TokenManager.invalidate()
         val retried = chain.request().newBuilder()
@@ -30,6 +31,10 @@ private val authInterceptor = Interceptor { chain ->
     } else {
         response
     }
+}
+
+private val loggingInterceptor = HttpLoggingInterceptor().apply {
+    level = HttpLoggingInterceptor.Level.HEADERS
 }
 
 object IntraApi {

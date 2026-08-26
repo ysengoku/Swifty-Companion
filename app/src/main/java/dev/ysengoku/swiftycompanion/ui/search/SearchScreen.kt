@@ -14,16 +14,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Brush
 import dev.ysengoku.swiftycompanion.ui.theme.Navy
 import dev.ysengoku.swiftycompanion.ui.theme.OceanBlue
 import dev.ysengoku.swiftycompanion.ui.theme.LightGreen
-import dev.ysengoku.swiftycompanion.ui.theme.Asimovian
+import dev.ysengoku.swiftycompanion.ui.theme.BlueWhite
+import dev.ysengoku.swiftycompanion.ui.theme.ZenLoop
 
 @Composable
 fun SearchScreen(
@@ -49,28 +55,37 @@ fun SearchScreen(
                 "Swifty\n Companion",
                 Modifier
                     .align(alignment = Alignment.CenterHorizontally)
-                    .padding(bottom = 80.dp),
-                fontFamily = Asimovian,
-                fontSize = 56.sp,
+                    .padding(bottom = 56.dp),
+                fontFamily = ZenLoop,
+                fontSize = 72.sp,
+                lineHeight = 56.sp,
                 style = MaterialTheme.typography.headlineLarge.copy(
-                    color = Color.White.copy(alpha = 0.6f)
+                    color = BlueWhite.copy(alpha = 0.7f)
                 )
             )
 
-            TextField(
+            OutlinedTextField(
                 value = text,
                 onValueChange = { text = it },
-                label = { Text("Enter 42 Login to search") },
+                placeholder = { Text("Enter 42 Login to search") },
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = BlueWhite.copy(alpha = 0.8f),
+                    unfocusedContainerColor = BlueWhite.copy(alpha = 0.6f)
+                ),
+                leadingIcon = {
+                    Icon(Icons.Default.Search, contentDescription = null)
+                }
+
             )
             
             Button(
-                onClick = { onSubmit(text) },
+                onClick = { if (text.isNotBlank()) onSubmit(text) },
                 Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(top = 16.dp)
+                    .padding(top = 16.dp),
             ) {
                 Text("Search")
-                // TODO: Handle empty input
             }
         }
     }

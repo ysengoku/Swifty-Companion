@@ -12,7 +12,11 @@ import dev.ysengoku.swiftycompanion.ui.detail.DetailScreen
 fun AppNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "search") {
+    NavHost(
+        navController = navController,
+        startDestination = "search",
+        modifier = modifier,
+    ) {
         composable("search") {
             SearchScreen(onSubmit = { login ->
                 navController.navigate("detail/$login")

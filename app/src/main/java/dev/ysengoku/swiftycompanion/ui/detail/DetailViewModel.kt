@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import java.io.IOException
 import kotlin.math.roundToInt
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import dev.ysengoku.swiftycompanion.data.IntraApi
 import dev.ysengoku.swiftycompanion.data.model.Campus
 import dev.ysengoku.swiftycompanion.data.model.CampusUser
@@ -67,9 +69,8 @@ class DetailViewModel (
                 },
                 onFailure = {
                     _uiState.value = DetailUiState(
-                        LoadState.Error(it.message ?: "An unexpected error has occured")
+                        LoadState.Error(mapErrorMessage(it))
                     )
-                    // HTTP 404
                 }
             )
         }
@@ -133,8 +134,8 @@ class DetailViewModel (
             ProjectUi(
                 it.cursusIds[0],
                 it.project.name,
-                requireNotNull(it.finalMark),
-                requireNotNull(it.validated)
+                it.finalMark ?: 0,
+                it.validated ?: false
             )
         }
     }
@@ -142,5 +143,15 @@ class DetailViewModel (
     private fun resolveSelectedCursusId(cursusUsers: List<CursusUser>): Int {
         val fortyTwoCursus = cursusUsers.find { it.cursus.name == "42cursus" }
         return fortyTwoCursus?.cursus?.id ?: requireNotNull(cursusUsers.maxByOrNull { it.beginAt }).cursus.id
+    }
+
+    private fun mapErrorMessage(e: Throwable): String {
+        when {
+            e is HttpException && e.code() == 404 -> return "Login \"$login\" does not exist."
+            e is HttpException && e.code() == 500 -> return "The server is temporarily unavailable. Please try again later."
+            e is HttpException -> return "Something went wrong. Please try again."
+            e is IOException -> return "Couldn't connect. Check your internet connection and try again."
+            else -> return e.message ?: "An unexpected error has occurred"
+        }
     }
 }
