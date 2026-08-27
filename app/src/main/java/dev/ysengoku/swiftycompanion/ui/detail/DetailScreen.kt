@@ -2,10 +2,6 @@ package dev.ysengoku.swiftycompanion.ui.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,13 +11,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -31,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.ysengoku.swiftycompanion.ui.theme.Navy
 import dev.ysengoku.swiftycompanion.ui.theme.OceanBlue
 import dev.ysengoku.swiftycompanion.ui.theme.LightGreen
@@ -68,13 +68,14 @@ fun DetailScreen (
                         )
                     )
                 )
-                .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
+                .padding(innerPadding),
+            verticalArrangement = if (loadState is LoadState.Success) Arrangement.Top else Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {            
             when (loadState) {
                 is LoadState.Loading -> CircularProgressIndicator()
-                is LoadState.Success -> Text(loadState.detail.login)
+                is LoadState.Success -> UserProfileScreen(loadState.detail, state.selectedCursusId)
                 is LoadState.Error -> ErrorScreen(loadState.message, onBack)
             }
         }
@@ -124,8 +125,8 @@ fun ErrorScreen (
         contentDescription = "Error",
         modifier = Modifier
             .padding(bottom = 16.dp)
-            .size(176.dp),
-        tint = OceanBlue,
+            .size(160.dp),
+        tint = OceanBlue.copy(alpha = 0.7f),
     )   
 
     Text(

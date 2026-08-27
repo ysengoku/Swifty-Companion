@@ -82,7 +82,7 @@ class DetailViewModel (
             user.image?.link,
             user.displayname,
             resolveCampus(user.campus, user.campusUsers),
-            resolveTitle(user.titles, user.titlesUsers),
+            resolveTitle(user.titles, user.titlesUsers, user.login),
             mapCursus(user.cursusUsers),
             mapProjects(user.projectsUsers)
         )
@@ -99,11 +99,12 @@ class DetailViewModel (
     
     private fun resolveTitle(
         titles: List<Title>,
-        titlesUsers: List<TitleUser>
+        titlesUsers: List<TitleUser>,
+        login: String
     ): String? {
         val selected = titlesUsers.singleOrNull { it.selected }
         val title = titles.singleOrNull { selected?.titleId == it.id }
-        return title?.name
+        return title?.name?.replace("%login", login)
     }
     
     private fun mapCursus(cursusUsers: List<CursusUser>): List<CursusUi> {
