@@ -84,7 +84,7 @@ class DetailViewModel (
             resolveCampus(user.campus, user.campusUsers),
             resolveTitle(user.titles, user.titlesUsers, user.login),
             mapCursus(user.cursusUsers),
-            mapProjects(user.projectsUsers)
+            mapProjects(user.projectsUsers),
         )
     }
     
@@ -123,9 +123,9 @@ class DetailViewModel (
     private fun mapSkill(skills: List<Skill>): List<SkillUi> {
         return skills.map {
             SkillUi(
+                it.id,
                 it.name,
-                it.level.roundToInt(),
-                ((it.level % 1) * 100).roundToInt()
+                it.level
             )
         }
     }
@@ -133,10 +133,11 @@ class DetailViewModel (
     private fun mapProjects(projectsUsers: List<ProjectUser>): List<ProjectUi> {
         return projectsUsers.filter { it.status == ProjectStatus.FINISHED }.map {
             ProjectUi(
+                it.id,
                 it.cursusIds[0],
                 it.project.name,
                 it.finalMark ?: 0,
-                it.validated ?: false
+                it.validated ?: false,
             )
         }
     }

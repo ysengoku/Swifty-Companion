@@ -27,13 +27,14 @@ data class CursusUi (
 )
 
 data class SkillUi (
+    val id: Int,
     val name: String,
-    val level: Int,
-    val percentage: Int,
+    val level: Float
 )
 
 data class ProjectUi (
     // A project belongs to exactly one cursus, see ProjectUser.cursusIds
+    val id: Int,
     val cursusId: Int,
     val name: String,
     val finalMark: Int,
