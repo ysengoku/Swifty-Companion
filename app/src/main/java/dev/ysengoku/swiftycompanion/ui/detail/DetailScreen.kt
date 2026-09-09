@@ -74,7 +74,9 @@ fun DetailScreen (
             horizontalAlignment = Alignment.CenterHorizontally
         ) {            
             when (loadState) {
-                is LoadState.Loading -> CircularProgressIndicator()
+                is LoadState.Loading -> CircularProgressIndicator(
+                    color = LightGreen
+                )
                 is LoadState.Success -> UserProfileScreen(loadState.detail, state.selectedCursusId)
                 is LoadState.Error -> ErrorScreen(loadState.message, onBack)
             }
@@ -93,10 +95,11 @@ fun DetailScreenTopBar (
             Text(
                 text = login ?: "",
                 color = BlueWhite,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         },
-        Modifier
+        modifier = Modifier
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(OceanBlue, LightGreen)

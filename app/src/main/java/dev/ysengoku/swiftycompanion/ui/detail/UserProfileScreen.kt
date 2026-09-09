@@ -20,10 +20,12 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
@@ -58,7 +60,7 @@ fun UserProfileScreen (
         mutableStateOf(user.cursus.find { it.id == selectedCursusId } ?: user.cursus.first())
     }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
@@ -75,157 +77,161 @@ fun UserProfileScreen (
             selectedCursus = selectedCursus,
             onCursusSelected = { selectedCursus = it }
         )
-        Spacer(Modifier.size(16.dp))
-        LazyColumn(
-            modifier = Modifier.weight(1f)
-        ) {
-            ProjectList(
+        ProjectList(
                 projects = user.projects,
                 selectedCursusId = selectedCursus.id
-            )
-            SkillList(skills = selectedCursus.skills)
-        }
+        )
+        SkillList(skills = selectedCursus.skills)
     }
 }
 
-@Composable
 @Suppress("FunctionName")
-fun ProfileHeader(
+fun LazyListScope.ProfileHeader(
     imagePath: String?,
     displayname: String,
     title: String,
     campus: CampusUi,
 ) {
-    Row {
-        AsyncImage(
-            model = imagePath,
-            contentDescription = "Profile picture",
-            modifier = Modifier
-              .size(100.dp)
-              .clip(CircleShape),
-            contentScale = ContentScale.Crop,
-            error = painterResource(id = R.drawable.default_picture),
-        )
-
-        Spacer(Modifier.size(20.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                displayname,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium,
+    item {
+        Row {
+            AsyncImage(
+                model = imagePath,
+                contentDescription = "Profile picture",
                 modifier = Modifier
-                    .padding(top = 8.dp)
+                    .size(96.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop,
+                error = painterResource(id = R.drawable.default_picture),
             )
-            Text(
-                title,
-                fontSize = 14.sp
-            )
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    Icons.Default.LocationOn,
-                    contentDescription = null,
-                    modifier = Modifier.size(14.dp),
-                    tint = OceanBlue
-                )
-                Spacer(modifier = Modifier.width(4.dp))
+
+            Spacer(Modifier.size(20.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    "${campus.name}, ${campus.country}",
-                    fontSize = 14.sp,
-                    color = OceanBlue
+                    displayname,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier
+                        .padding(top = 8.dp)
                 )
+                Text(
+                    title,
+                    style = MaterialTheme.typography.labelMedium,
+                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.LocationOn,
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp),
+                        tint = OceanBlue
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        "${campus.name}, ${campus.country}",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = OceanBlue
+                    )
+                }
             }
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
 @Suppress("FunctionName")
-fun CursusInfo(
+fun LazyListScope.CursusInfo(
     cursus: List<CursusUi>,
     selectedCursus: CursusUi,
     onCursusSelected: (CursusUi) -> Unit
 ) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                "Cursus:  ",
-                fontSize = 12.sp
-            )
-            if (cursus.size == 1) {
-                Text(selectedCursus.name, /*fontSize = 14.sp*/)
-            } else {
-                ExposedDropdownMenuBox(
-                    expanded = expanded,
-                    onExpandedChange = { expanded = it }
-                ) {
-                    Row(
-                        modifier = Modifier.menuAnchor(),
-                        verticalAlignment = Alignment.CenterVertically
+    item {
+        var expanded by remember { mutableStateOf(false) }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    "Cursus:  ",
+                    style = MaterialTheme.typography.labelSmall
+                )
+                if (cursus.size == 1) {
+                    Text(
+                        selectedCursus.name,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                } else {
+                    ExposedDropdownMenuBox(
+                        expanded = expanded,
+                        onExpandedChange = { expanded = it }
                     ) {
-                        BasicTextField(
-                            value = selectedCursus.name,
-                            onValueChange = {},
-                            readOnly = true,
-                            textStyle = TextStyle(/*fontSize = 14.sp*/)
-                        )
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = expanded,
-                            modifier = Modifier.alpha(0.6f)
-                        )
-                    }
-                    ExposedDropdownMenu(
-                          expanded = expanded,
-                          onDismissRequest = { expanded = false }
-                    ) {
-                        cursus.forEach { c ->
-                            DropdownMenuItem(
-                                text = { Text(c.name) },
-                                onClick = {
-                                    onCursusSelected(c)
-                                    expanded = false
-                                }
+                        Row(
+                            modifier = Modifier
+                                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            BasicTextField(
+                                value = selectedCursus.name,
+                                onValueChange = {},
+                                readOnly = true,
+                                textStyle = MaterialTheme.typography.bodyMedium
                             )
+                            ExposedDropdownMenuDefaults.TrailingIcon(
+                                expanded = expanded,
+                                modifier = Modifier.alpha(0.6f)
+                            )
+                        }
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            cursus.forEach { c ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            c.name,
+                                            style = MaterialTheme.typography.bodyMedium
+                                        )},
+                                    onClick = {
+                                        onCursusSelected(c)
+                                        expanded = false
+                                    }
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
 
-        Spacer(modifier = Modifier.size(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    "Grade:  ",
+                    style = MaterialTheme.typography.labelSmall
+                )
+                Text(selectedCursus.grade ?: "N/A", fontSize = 14.sp)
+            }
 
-        Row {
-            Text("Grade:  ", fontSize = 12.sp)
-            Text(selectedCursus.grade ?: "N/A", fontSize = 14.sp)
-        }
+            Spacer(modifier = Modifier.size(16.dp))
 
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Row {
-            Text(
-                "Level ${selectedCursus.level}",
+            Row {
+                Text(
+                    "Level ${selectedCursus.level}",
+                    color = OceanBlue,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text("  -  ${selectedCursus.percentage} %", fontSize = 14.sp)
+            }
+            LinearProgressIndicator(
+                progress = { selectedCursus.percentage / 100f },
                 color = OceanBlue,
-                fontWeight = FontWeight.Medium
+                trackColor = LightGreen.copy(alpha = 0.1f),
+                strokeCap = StrokeCap.Round,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+                    .height(8.dp)
             )
-            Text("  -  ${selectedCursus.percentage} %", fontSize = 14.sp)
         }
-        LinearProgressIndicator(
-            progress = { selectedCursus.percentage / 100f },
-            color = OceanBlue,
-            trackColor = LightGreen.copy(alpha = 0.1f),
-            strokeCap = StrokeCap.Round,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
-                .height(8.dp)
-        )
     }
 }
 
@@ -240,7 +246,7 @@ fun LazyListScope.ProjectList(
         Text(
             "Projects:",
             color = OceanBlue,
-            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 32.dp)
@@ -285,7 +291,7 @@ fun LazyListScope.SkillList(
         Text(
             "Skills:",
             color = OceanBlue,
-            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 32.dp)
@@ -306,12 +312,10 @@ fun LazyListScope.SkillList(
             ) {
                 Text(
                     skill.name,
-                    /*fontSize = 14.sp,*/
                     modifier = Modifier.weight(1f)
                 )
                 Text(
                     skill.level.toString(),
-                    /*fontSize = 14.sp,*/
                 )
             }
             LinearProgressIndicator(
