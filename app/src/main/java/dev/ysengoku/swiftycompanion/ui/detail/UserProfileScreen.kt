@@ -116,6 +116,8 @@ fun LazyListScope.ProfileHeader(
                 Text(
                     title,
                     style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier
+                        .padding(vertical = 2.dp)
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
@@ -158,7 +160,8 @@ fun LazyListScope.CursusInfo(
                 if (cursus.size == 1) {
                     Text(
                         selectedCursus.name,
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        lineHeight = 18.sp
                     )
                 } else {
                     ExposedDropdownMenuBox(
@@ -213,7 +216,7 @@ fun LazyListScope.CursusInfo(
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     "Level ${selectedCursus.level}",
                     color = OceanBlue,
