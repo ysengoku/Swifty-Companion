@@ -2,8 +2,11 @@ package dev.ysengoku.swiftycompanion.data
 
 import dev.ysengoku.swiftycompanion.data.model.User
 import okhttp3.Interceptor
-import okhttp3.logging.HttpLoggingInterceptor
+/*import okhttp3.logging.HttpLoggingInterceptor*/
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
+import okhttp3.Response
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -15,17 +18,39 @@ interface IntraService {
 }
 
 private val authInterceptor = Interceptor { chain ->
-    val request = chain.request().newBuilder()
-        .header("Authorization", "Bearer ${TokenManager.getToken()}")
-        .build()
+    val baseRequest = chain.request()
+
+    fun tokenErrorResponse(e: TokenException): Response =
+        Response.Builder()
+            .request(baseRequest)
+            .protocol(Protocol.HTTP_1_1)
+            .code(e.code)
+            .message(e.message ?: "Token error")
+            .body("".toResponseBody(null))
+            .build()
+
+    val token = try {
+        TokenManager.getToken()
+    } catch (e: TokenException) {
+        return@Interceptor tokenErrorResponse(e)
+    }
+
+    val request = baseRequest.newBuilder()
+            .header("Authorization", "Bearer $token")
+            .build()
 
     val response = chain.proceed(request)
 
     if (response.code == 401 || response.code == 403) {
         response.close()
         TokenManager.invalidate()
-        val retried = chain.request().newBuilder()
-            .header("Authorization", "Bearer ${TokenManager.getToken()}")
+        val retriedToken = try {
+            TokenManager.getToken()
+        } catch (e: TokenException) {
+            return@Interceptor tokenErrorResponse(e)
+        }
+        val retried = baseRequest.newBuilder()
+            .header("Authorization", "Bearer $retriedToken")
             .build()
         chain.proceed(retried)
     } else {
@@ -33,14 +58,19 @@ private val authInterceptor = Interceptor { chain ->
     }
 }
 
-private val loggingInterceptor = HttpLoggingInterceptor().apply {
+/*private val loggingInterceptor = HttpLoggingInterceptor().apply {
     level = HttpLoggingInterceptor.Level.HEADERS
-}
+}*/
 
 object IntraApi {
     val service: IntraService = Retrofit.Builder()
         .baseUrl(ApiConfig.BASE_URL)
-        .client(OkHttpClient.Builder().addInterceptor(authInterceptor).build())
+        .client(
+            OkHttpClient.Builder()
+                .addInterceptor(authInterceptor)
+                /*.addInterceptor(loggingInterceptor)*/
+                .build()
+        )
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(IntraService::class.java)

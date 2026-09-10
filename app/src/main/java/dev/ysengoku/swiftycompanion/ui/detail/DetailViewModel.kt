@@ -151,7 +151,7 @@ class DetailViewModel (
         when {
             e is HttpException && e.code() == 404 -> return "Login \"$login\" does not exist."
             e is HttpException && e.code() == 500 -> return "The server is temporarily unavailable. Please try again later."
-            e is HttpException -> return "Something went wrong. Please try again."
+            e is HttpException -> return "Unable to complete this request right now."
             e is IOException -> return "Couldn't connect. Check your internet connection and try again."
             else -> return e.message ?: "An unexpected error has occurred"
         }

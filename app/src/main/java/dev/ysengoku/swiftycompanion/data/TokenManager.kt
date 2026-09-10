@@ -6,8 +6,8 @@ import okhttp3.Request
 import com.google.gson.Gson
 import dev.ysengoku.swiftycompanion.BuildConfig
 import dev.ysengoku.swiftycompanion.data.model.TokenResponse
-import dev.ysengoku.swiftycompanion.data.model.User
-import java.io.IOException
+
+class TokenException(val code: Int): Exception("Token request failed: $code")
 
 object TokenManager {
     private val client = OkHttpClient()
@@ -42,7 +42,7 @@ object TokenManager {
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) {
-                throw IOException("Token request failed: ${response.code}")
+                throw TokenException(response.code)
             }
             val json = response.body.string()
             val parsed = gson.fromJson(json, TokenResponse::class.java)
@@ -51,6 +51,4 @@ object TokenManager {
             return parsed.accessToken
         }
     }
-
-
 }
