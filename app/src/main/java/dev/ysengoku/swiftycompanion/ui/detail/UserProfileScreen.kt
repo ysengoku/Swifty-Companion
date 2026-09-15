@@ -11,13 +11,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -27,22 +27,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import dev.ysengoku.swiftycompanion.R
 import dev.ysengoku.swiftycompanion.ui.theme.ErrorRed
@@ -101,7 +99,7 @@ fun LazyListScope.ProfileHeader(
                     .size(96.dp)
                     .clip(CircleShape),
                 contentScale = ContentScale.Crop,
-                error = painterResource(id = R.drawable.default_picture),
+                error = painterResource(id = R.drawable.default_picture)
             )
 
             Spacer(Modifier.size(20.dp))
@@ -246,42 +244,44 @@ fun LazyListScope.ProjectList(
     val filtered = projects.filter { it.cursusId == selectedCursusId }
 
     item {
-        Text(
-            "Projects:",
-            color = OceanBlue,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 32.dp)
-        )
-        Spacer(modifier = Modifier.size(4.dp))
-    }
-
-    items(filtered, key = { it.id }) { project ->
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 6.dp)
+        SectionCard(
+            title = "Projects"
         ) {
-            Text(
-                project.name,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 4.dp)
-            )
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    if (project.validated) Icons.Default.Check else Icons.Default.Close,
-                    contentDescription = null,
-                    modifier = Modifier.size(14.dp),
-                    tint = if (project.validated) Green else ErrorRed
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    project.finalMark.toString(),
-                    color = if (project.validated) Green else ErrorRed
-                )
+            filtered.forEachIndexed { index, project ->
+                ProjectRow(project)
             }
+        }
+    }
+}
+
+@Suppress("FunctionName")
+@Composable
+private fun ProjectRow(project: ProjectUi) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Text(
+            project.name,
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp, end = 4.dp)
+        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                if (project.validated) Icons.Default.Check else Icons.Default.Close,
+                contentDescription = null,
+                modifier = Modifier.size(14.dp),
+                tint = if (project.validated) Green else ErrorRed
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                project.finalMark.toString(),
+                color = if (project.validated) Green else ErrorRed,
+                modifier = Modifier
+                    .padding(end = 8.dp)
+            )
         }
     }
 }
@@ -291,46 +291,50 @@ fun LazyListScope.SkillList(
     skills: List<SkillUi>
 ) {
     item {
-        Text(
-            "Skills:",
-            color = OceanBlue,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 32.dp)
-        )
-        Spacer(modifier = Modifier.size(4.dp))
-    }
-
-    items(skills, key = { it.id }) { skill ->
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp)
+        SectionCard(
+            title = "Skills"
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-            ) {
-                Text(
-                    skill.name,
-                    modifier = Modifier.weight(1f)
-                )
-                Text(
-                    skill.level.toString(),
-                )
+            skills.forEachIndexed { index, skill ->
+                SkillRow(skill)
             }
-            LinearProgressIndicator(
-                progress = { skill.level / 20f },
-                color = Green,
-                trackColor = LightGreen.copy(alpha = 0.1f),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .height(4.dp)
-            )
-            Spacer(modifier = Modifier.size(8.dp))
         }
+    }
+}
+
+@Suppress("FunctionName")
+@Composable
+private fun SkillRow(skill: SkillUi) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 8.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        ) {
+            Text(
+                skill.name,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 16.dp)
+            )
+            Text(
+                skill.level.toString(),
+                modifier = Modifier
+                    .padding(end = 16.dp)
+            )
+        }
+        LinearProgressIndicator(
+            progress = { skill.level / 20f },
+            color = Green,
+            trackColor = LightGreen.copy(alpha = 0.1f),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, start = 16.dp, end = 16.dp)
+                .height(4.dp)
+        )
+        Spacer(modifier = Modifier.size(8.dp))
     }
 }

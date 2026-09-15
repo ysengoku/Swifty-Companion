@@ -14,6 +14,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -74,9 +75,7 @@ fun DetailScreen (
             horizontalAlignment = Alignment.CenterHorizontally
         ) {            
             when (loadState) {
-                is LoadState.Loading -> CircularProgressIndicator(
-                    color = LightGreen
-                )
+                is LoadState.Loading -> LoadingScreen()
                 is LoadState.Success -> UserProfileScreen(loadState.detail, state.selectedCursusId)
                 is LoadState.Error -> ErrorScreen(loadState.message, onBack)
             }
@@ -85,8 +84,22 @@ fun DetailScreen (
 }
 
 @Composable
+fun LoadingScreen() {
+    CircularProgressIndicator(
+        color = LightGreen
+    )
+    Text(
+        "Searching...",
+        style = MaterialTheme.typography.labelMedium,
+        color = LightGreen,
+        modifier = Modifier
+                .padding(top = 16.dp)
+    )
+}
+
+@Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun DetailScreenTopBar (
+fun DetailScreenTopBar(
     login: String?,
     onBack: () -> Unit
 ) {
