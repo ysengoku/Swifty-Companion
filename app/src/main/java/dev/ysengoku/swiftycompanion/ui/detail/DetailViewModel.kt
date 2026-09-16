@@ -113,8 +113,8 @@ class DetailViewModel (
                 it.cursusId,
                 it.cursus.name,
                 it.grade,
-                it.level.roundToInt(),
-                ((it.level % 1) * 100).roundToInt(),
+                it.level.toInt(),
+                ((it.level % 1) * 100).toInt(),
                 mapSkill(it.skills)
             )
         }

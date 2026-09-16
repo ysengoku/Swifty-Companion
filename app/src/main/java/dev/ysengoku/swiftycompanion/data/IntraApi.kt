@@ -2,7 +2,7 @@ package dev.ysengoku.swiftycompanion.data
 
 import dev.ysengoku.swiftycompanion.data.model.User
 import okhttp3.Interceptor
-/*import okhttp3.logging.HttpLoggingInterceptor*/
+import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.Response
@@ -58,9 +58,13 @@ private val authInterceptor = Interceptor { chain ->
     }
 }
 
-/*private val loggingInterceptor = HttpLoggingInterceptor().apply {
-    level = HttpLoggingInterceptor.Level.HEADERS
-}*/
+// Set to Level.HEADERS or Level.BODY, and wire into OkHttpClient.Builder below,
+// when debugging network calls locally. See "Debugging" in the README.
+@Suppress("unused")
+private val loggingInterceptor = HttpLoggingInterceptor().apply {
+    level = HttpLoggingInterceptor.Level.NONE
+    redactHeader("Authorization")
+}
 
 object IntraApi {
     val service: IntraService = Retrofit.Builder()
@@ -68,7 +72,6 @@ object IntraApi {
         .client(
             OkHttpClient.Builder()
                 .addInterceptor(authInterceptor)
-                /*.addInterceptor(loggingInterceptor)*/
                 .build()
         )
         .addConverterFactory(GsonConverterFactory.create())

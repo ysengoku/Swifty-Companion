@@ -36,6 +36,7 @@
   - [Workflow](#workflow)
   - [Linting & Formatting](#linting--formatting)
   - [Testing](#testing)
+  - [Debugging](#debugging)
 - [Notes](#notes)
 - [Resources](#resources)
 - [AI Usage](#ai-usage)
@@ -253,6 +254,33 @@ In this project, the subject requires a `.env` file instead, so `.env` is parsed
 ### Linting & Formatting
 
 ### Testing
+
+### Debugging
+
+`IntraApi.kt` declares an OkHttp `HttpLoggingInterceptor` set to `Level.NONE` so it never logs anything by default (it would otherwise print the `Authorization: Bearer <token>` header to Logcat). To inspect network calls locally, temporarily change the level:
+
+```kotlin
+private val loggingInterceptor = HttpLoggingInterceptor().apply {
+    level = HttpLoggingInterceptor.Level.HEADERS // or Level.BODY for request/response bodies too
+    redactHeader("Authorization") // Keep the bearer token out of the logs
+}
+```
+
+```kotlin
+object IntraApi {
+    val service: IntraService = Retrofit.Builder()
+        .baseUrl(ApiConfig.BASE_URL)
+        .client(
+            OkHttpClient.Builder()
+                .addInterceptor(authInterceptor)
+                .addInterceptor(loggingInterceptor) // Add the logger here
+                .build()
+        )
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(IntraService::class.java)
+}
+```
 
 ## Notes
 
