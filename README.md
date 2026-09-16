@@ -25,6 +25,7 @@
 - [Objectives](#objectives)
 - [Features](#features)
 - [Architecture](#architecture)
+  - [Request Flow](#request-flow)
 - [Project Structure](#project-structure)
 - [Tech Stack](#tech-stack)
 - [Technical Restrictions](#technical-restrictions)
@@ -55,11 +56,21 @@ This project served as an introduction to mobile app development, from picking u
 
 ## Features
 
-- Search for a 42 student by login and view their profile: picture, name, campus, and title, alongside their level and skills
+- Search for a 42 student by login and view their profile: picture, name, campus, and title, alongside their level,completed projects and skills
 - Switch between the student's cursus to browse the skills and projects for each one
 - OAuth2 authentication handled transparently, including automatic token refresh
 
 ## Architecture
+
+This follows the standard Android-recommended **MVVM** architecture, with a **Repository** layer abstracting the data source from the ViewModel.
+
+- **Model** (data layer) provides user data to the ViewModel, isolated from network details:
+  - **Repository** is the single entry point to the data layer. It hides the network call behind a plain suspend function and turns the outcome into a `Result`.
+  - **API (IntraApi / Retrofit)** talks to the 42 Intra API over HTTP, with the OAuth2 token attached, and transparently refreshed, by an interceptor.
+- **View** (UI layer) renders the current state and forwards user actions to the ViewModel. It holds no business logic.
+- **ViewModel** owns the screen's state, decides when to fetch data, and derives view-specific data (e.g. which cursus's projects to show) from what it already holds, instead of storing it separately.
+
+### Request Flow
 
 The diagram below traces a single user flow, from launching the app to viewing a 42 student's profile, through the layers involved (UI, ViewModel, Repository, API).
 
@@ -94,13 +105,6 @@ sequenceDiagram
     end
 ```
 
-**Layers:**
-
-- **UI (Jetpack Compose)** renders the current state and forwards user actions to the ViewModel. It holds no business logic.
-- **ViewModel** owns the screen's state, decides when to fetch data, and derives view-specific data (e.g. which cursus's projects to show) from what it already holds, instead of storing it separately.
-- **Repository** is the single entry point to the data layer. It hides the network call behind a plain suspend function and turns the outcome into a `Result`.
-- **API (IntraApi / Retrofit)** talks to the 42 Intra API over HTTP, with the OAuth2 token attached, and transparently refreshed, by an interceptor.
-
 **Data fetching ownership:**
 
 The detail screen receives only a login as its navigation argument and fetches the user itself, rather than the search screen fetching first and passing the result along.   
@@ -129,7 +133,8 @@ This keeps the two screens independent: the detail screen works the same way reg
 │       │   │   └── dev
 │       │   │       └── ysengoku
 │       │   │           └── swiftycompanion
-│       │   │               ├── data                      # data layer (API, token management)
+│       │   │               ├── MainActivity.kt           # app entry point
+│       │   │               ├── data
 │       │   │               │   ├── ApiConfig.kt           # API base URL and related config
 │       │   │               │   ├── IntraApi.kt            # Retrofit client and auth interceptor
 │       │   │               │   ├── model
@@ -138,23 +143,21 @@ This keeps the two screens independent: the detail screen works the same way reg
 │       │   │               │   ├── repository
 │       │   │               │   │   └── UserRepository.kt  # repository for fetching a user
 │       │   │               │   └── TokenManager.kt        # fetches, caches and refreshes the OAuth2 token
-│       │   │               ├── MainActivity.kt            # app entry point
 │       │   │               └── ui
-│       │   │                   ├── detail
-│       │   │                   │   ├── DetailScreen.kt      # detail screen UI
-│       │   │                   │   ├── DetailUiModel.kt     # UI data model for the detail screen
-│       │   │                   │   └── DetailViewModel.kt   # detail screen state management
 │       │   │                   ├── navigation
 │       │   │                   │   └── AppNavigation.kt     # screen navigation setup
 │       │   │                   ├── search
 │       │   │                   │   └── SearchScreen.kt      # search screen UI
-│       │   │                   └── theme
-│       │   │                       ├── Color.kt             # color palette (generated)
-│       │   │                       ├── Theme.kt             # Compose theme (generated)
-│       │   │                       └── Type.kt              # typography (generated)
-│       │   └── res                   # images, strings and other resources
+│       │   │                   ├── detail
+│       │   │                   │   ├── DetailScreen.kt      # detail screen UI
+│       │   │                   │   ├── UserProfileScreen.kt # composable rendering the profile, used in DetailScreen
+│       │   │                   │   ├── DetailUiModel.kt     # UI data model for the detail screen
+│       │   │                   │   └── DetailViewModel.kt   # detail screen state management
+│       │   │                   ├── component # reusable composables
+│       │   │                   └── theme     # Material 3 theme definitions
+│       │   │
+│       │   └── res                   # images, fonts and other resources
 │       └── test                      # unit tests
-├── build.gradle.kts                  # top-level build config
 ├── gradle
 │   ├── gradle-daemon-jvm.properties  # required JDK version for Gradle
 │   ├── libs.versions.toml            # dependency version catalog
@@ -166,8 +169,7 @@ This keeps the two screens independent: the detail screen works the same way reg
 ├── gradlew.bat                       # Gradle Wrapper launch script (Windows)
 ├── local.properties                  # local machine settings, e.g. SDK path (gitignored)
 ├── settings.gradle.kts               # declares the included modules
-├── .env                              # API credentials (gitignored)
-└── README.md
+└─ .env                              # API credentials (gitignored)
 ```
 
 ## Tech Stack
@@ -193,10 +195,7 @@ than the Java equivalent.
   <img src="https://img.shields.io/badge/Coil-333333?style=for-the-badge&logo=kotlin&logoColor=7F52FF" />
 </div>
 
-- **Jetpack Compose** is a declarative UI toolkit and part of AndroidX. It satisfies
-the subject's requirement for a flexible layout technique: layouts adapt to screen
-size without separate XML files per configuration. **Navigation Compose** handles
-the two required views and the back stack.
+- **Jetpack Compose** is a declarative UI toolkit and part of AndroidX. It satisfies the subject's requirement for a flexible layout technique: layouts adapt to screen size without separate XML files per configuration. **Navigation Compose** handles the two required views and the back stack.
 
 - **Retrofit** is the HTTP client. Android has no usable built-in one, so writing
 against `HttpURLConnection` would mean handling threading, error mapping and JSON
@@ -204,8 +203,7 @@ parsing by hand. Its Gson converter maps the 42 API's responses onto Kotlin data
 classes. **OkHttp** is Retrofit's underlying engine, declared explicitly here
 because the bearer token is attached through a custom interceptor.
 
-- **Coil** loads profile pictures, handling download, caching and lifecycle-aware
-cancellation.
+- **Coil** loads profile pictures, handling download, caching and lifecycle-aware cancellation.
 <br />
 
 **API:**
@@ -243,9 +241,21 @@ In this project, the subject requires a `.env` file instead, so `.env` is parsed
 
 ### Prerequisites
 
+- Android studio (SDK 26-37, this project targets `compileSdk 37`)
+- A 42 API application (UID + Secret)
+
+For the 42 Lyon cluster with limited disk quota, use [42-android-setup](https://github.com/ysengoku/42-android-setup) to install Studio under `~/opt` and the SDK/Gradle cache under `/goinfre` instead of the default paths.
+
 ### Installation
 
+1. Clone the repo
+2. Copy `.env.example` to `.env` and fill in your 42 API `API_UID` and `API_SECRET`
+3. Open the project in Android Studio and let Gradle sync
+
 ### Usage
+
+Run the app on an emulator or device (`Run ▶` in Android Studio, or `./gradlew installDebug`).   
+Enter a 42 login on the search screen to view that student's profile.
 
 ## Development
 
@@ -261,7 +271,7 @@ In this project, the subject requires a `.env` file instead, so `.env` is parsed
 
 ```kotlin
 private val loggingInterceptor = HttpLoggingInterceptor().apply {
-    level = HttpLoggingInterceptor.Level.HEADERS // or Level.BODY for request/response bodies too
+    level = HttpLoggingInterceptor.Level.HEADERS // or Level.BODY for request/response bodies
     redactHeader("Authorization") // Keep the bearer token out of the logs
 }
 ```
@@ -286,10 +296,15 @@ object IntraApi {
 
 ## Resources
 
+- [The OAuth 2.0 Authorization Framework](https://datatracker.ietf.org/doc/html/rfc6749)
+- [Kotlin docs](https://kotlinlang.org/docs/home.html)
+- [Meet Android Studio](https://developer.android.com/studio/intro)
+- [Get started with Jetpack Compose](https://developer.android.com/develop/ui/compose/documentation)
+
 ## Authors
 
 <div valign="top">
-  <img src="https://contrib.rocks/image?repo=ysengoku/camagru" height="30px" valign="middle" />
+  <img src="https://contrib.rocks/image?repo=ysengoku/swifty-companion" height="30px" valign="middle" />
   &nbsp Yuko SENGOKU &nbsp&nbsp (<a href="https://github.com/ysengoku">GitHub @ysengoku</a>)
 </div>
 
