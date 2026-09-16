@@ -1,12 +1,18 @@
 package dev.ysengoku.swiftycompanion.ui.detail
 
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size  
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -88,10 +94,20 @@ fun LoadingScreen() {
     CircularProgressIndicator(
         color = LightGreen
     )
-    Text(
+    val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
+    val animatedColor by infiniteTransition.animateColor(
+        initialValue = OceanBlue,
+        targetValue = LightGreen,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 2000),
+            repeatMode = RepeatMode.Reverse),
+        label = "color"
+    )
+
+    BasicText(
         "Searching...",
-        style = MaterialTheme.typography.labelMedium,
-        color = LightGreen,
+        style = MaterialTheme.typography.titleMedium,
+        color = {animatedColor},
         modifier = Modifier
                 .padding(top = 16.dp)
     )
