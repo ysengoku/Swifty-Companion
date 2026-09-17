@@ -72,7 +72,7 @@ const token = await res.json();
 
 const login = <<login_to_search>>
 const user = await fetch("https://api.intra.42.fr/v2/users/" + login, {
-  headers: { Authorization: "Bearer " + token },
+  headers: { Authorization: "Bearer " + token.access_token },
 }).then(r => r.json());
 
 user.projects_users

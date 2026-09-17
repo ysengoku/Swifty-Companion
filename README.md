@@ -135,14 +135,14 @@ This keeps the two screens independent: the detail screen works the same way reg
 │       │   │           └── swiftycompanion
 │       │   │               ├── MainActivity.kt           # app entry point
 │       │   │               ├── data
-│       │   │               │   ├── ApiConfig.kt           # API base URL and related config
-│       │   │               │   ├── IntraApi.kt            # Retrofit client and auth interceptor
+│       │   │               │   ├── ApiConfig.kt          # API base URL and related config
+│       │   │               │   ├── IntraApi.kt           # Retrofit client and auth interceptor
 │       │   │               │   ├── model
-│       │   │               │   │   ├── TokenResponse.kt   # OAuth2 token response model
-│       │   │               │   │   └── User.kt            # 42 API user response model
+│       │   │               │   │   ├── TokenResponse.kt  # OAuth2 token response model
+│       │   │               │   │   └── User.kt           # 42 API user response model
 │       │   │               │   ├── repository
-│       │   │               │   │   └── UserRepository.kt  # repository for fetching a user
-│       │   │               │   └── TokenManager.kt        # fetches, caches and refreshes the OAuth2 token
+│       │   │               │   │   └── UserRepository.kt # repository for fetching a user
+│       │   │               │   └── TokenManager.kt       # fetches, caches and refreshes the OAuth2 token
 │       │   │               └── ui
 │       │   │                   ├── navigation
 │       │   │                   │   └── AppNavigation.kt     # screen navigation setup
@@ -169,7 +169,7 @@ This keeps the two screens independent: the detail screen works the same way reg
 ├── gradlew.bat                       # Gradle Wrapper launch script (Windows)
 ├── local.properties                  # local machine settings, e.g. SDK path (gitignored)
 ├── settings.gradle.kts               # declares the included modules
-└─ .env                              # API credentials (gitignored)
+└─ .env                               # API credentials (gitignored)
 ```
 
 ## Tech Stack
@@ -219,6 +219,8 @@ because the bearer token is attached through a custom interceptor.
   <img src="https://img.shields.io/badge/Android_Studio-333333?style=for-the-badge&logo=androidstudio&logoColor=3DDC84" />
   <img src="https://img.shields.io/badge/Gradle-333333?style=for-the-badge&logo=gradle&logoColor=02303A" />
 </div>
+
+- **Gradle** is the build system. It compiles Kotlin, resolves dependencies, and packages the APK (Android Package Kit). The project uses the Gradle Wrapper (`./gradlew`) so that every contributor builds with the exact same Gradle version without installing separately.
 <br />
 
 **Development Environment:**
@@ -254,16 +256,37 @@ For the 42 Lyon cluster with limited disk quota, use [42-android-setup](https://
 
 ### Usage
 
-Run the app on an emulator or device (`Run ▶` in Android Studio, or `./gradlew installDebug`).   
-Enter a 42 login on the search screen to view that student's profile.
+**Build the debug APK:**   
+```bash
+./gradlew assembleDebug
+```
+
+**Run on a single emulator:**   
+```bash
+emulator -avd medium_phone &
+adb wait-for-device
+./gradlew installDebug
+
+# Or [Run ▶] in Android Studio
+```
+
+> [!NOTE]
+> **Debug vs Release builds:**
+> Gradle builds this app in two variants from the same codebase.
+> `debug`(`assembleDebug` / `installDebug`) is auto-signed with a local debug keystore,
+keeps the app debuggable, and skips code shrinking, used for local development and testing. 
+> `release` (`assembleRelease`) requires a signing key to install, and is what would ship to users.
 
 ## Development
 
-### Workflow
-
-### Linting & Formatting
-
 ### Testing
+
+Run unit tests with:
+```bash
+./gradlew testDebugUnitTest
+```
+
+_Manual test steps are documented in [TEST.md](./doc/TEST.md)._
 
 ### Debugging
 
@@ -291,8 +314,6 @@ object IntraApi {
         .create(IntraService::class.java)
 }
 ```
-
-## Notes
 
 ## Resources
 
