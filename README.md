@@ -261,13 +261,21 @@ For the 42 Lyon cluster with limited disk quota, use [42-android-setup](https://
 ./gradlew assembleDebug
 ```
 
-**Run on a single emulator:**   
+**Run on a medium_phone size emulator:**   
 ```bash
 emulator -avd medium_phone &
 adb wait-for-device
 ./gradlew installDebug
 
 # Or [Run ▶] in Android Studio
+```
+
+**Run on a medium_tablet size emulator:**   
+Close the medium_phone emulator first. Running both at once is heavy on the host machine.
+```bash
+emulator -avd medium_tablet &
+adb wait-for-device
+./gradlew installDebug
 ```
 
 > [!NOTE]
