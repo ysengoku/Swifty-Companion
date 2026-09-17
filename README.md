@@ -56,7 +56,7 @@ This project served as an introduction to mobile app development, from picking u
 
 ## Features
 
-- Search for a 42 student by login and view their profile: picture, name, campus, and title, alongside their level,completed projects and skills
+- Search for a 42 student by login and view their profile: picture, displayname, login, title, campus and groups, alongside their level, completed projects and skills in selected cursus.
 - Switch between the student's cursus to browse the skills and projects for each one
 - OAuth2 authentication handled transparently, including automatic token refresh
 
@@ -281,12 +281,28 @@ keeps the app debuggable, and skips code shrinking, used for local development a
 
 ### Testing
 
+#### Token management tests
+
 Run unit tests with:
 ```bash
 ./gradlew testDebugUnitTest
 ```
 
-_Manual test steps are documented in [TEST.md](./doc/TEST.md)._
+Or test manually on Android Studio:
+- **Reuse cached token while it's valide:**   
+  1. Open **View** -> **Tool Windows** -> **App Inspection** -> **Network Inspector**.   
+  2. Search a few different logins one after another.
+  3. Check if there is no token fetching except before the first search.   
+   
+   <img src="./doc/assets/network_inspector.png" width="75%">
+
+- **Recreate token at expiration:**   
+Since a real token lasts 2 hours, force it manually via the device clock rather than waiting...   
+  1. On the emulator, go to **Setting** -> **system** -> **Date & time**, then turn off "Autonatic date & time" and "Automatic time zone".   
+  2. Set the date/time 2+ hours ahead of the real time. 
+  3. Go back to the app and search a login. Search should succeed normally and we should see `token` call in **Network Inspector**.
+
+  <img src="./doc/assets/date_time_settings.png" width="35%">
 
 ### Debugging
 
