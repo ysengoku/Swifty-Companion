@@ -23,9 +23,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.ysengoku.swiftycompanion.ui.theme.Navy
-import dev.ysengoku.swiftycompanion.ui.theme.OceanBlue
-import dev.ysengoku.swiftycompanion.ui.theme.LightGreen
 import dev.ysengoku.swiftycompanion.ui.theme.BlueWhite
 import dev.ysengoku.swiftycompanion.ui.theme.ZenLoop
 
@@ -39,7 +36,10 @@ fun SearchScreen(
         Modifier
             .background(
                 brush = Brush.linearGradient(
-                    colors = listOf(LightGreen, OceanBlue, Navy)
+                    colors = listOf(
+                        MaterialTheme.colorScheme.secondary,
+                        MaterialTheme.colorScheme.primary,
+                        MaterialTheme.colorScheme.tertiary)
                 )
             )
             .fillMaxSize(),
@@ -65,7 +65,12 @@ fun SearchScreen(
             OutlinedTextField(
                 value = text,
                 onValueChange = { text = it },
-                placeholder = { Text("Enter 42 Login to search") },
+                placeholder = {
+                    Text(
+                        "Enter 42 Login to search",
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                },
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = BlueWhite.copy(alpha = 0.8f),

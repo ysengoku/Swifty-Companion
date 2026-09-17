@@ -36,13 +36,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.ysengoku.swiftycompanion.ui.theme.Navy
-import dev.ysengoku.swiftycompanion.ui.theme.OceanBlue
-import dev.ysengoku.swiftycompanion.ui.theme.LightGreen
 import dev.ysengoku.swiftycompanion.ui.theme.BlueWhite
-import dev.ysengoku.swiftycompanion.ui.theme.ErrorRed
 import dev.ysengoku.swiftycompanion.R
 
 @Composable
@@ -69,9 +64,9 @@ fun DetailScreen (
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(
-                            LightGreen.copy(alpha = 0.1f),
-                            OceanBlue.copy(alpha = 0.1f),
-                            Navy.copy(alpha = 0.1f)
+                            MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f),
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                            MaterialTheme.colorScheme.tertiary.copy(alpha = 0.1f)
                         )
                     )
                 )
@@ -92,12 +87,12 @@ fun DetailScreen (
 @Composable
 fun LoadingScreen() {
     CircularProgressIndicator(
-        color = LightGreen
+        color = MaterialTheme.colorScheme.secondary
     )
     val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
     val animatedColor by infiniteTransition.animateColor(
-        initialValue = OceanBlue,
-        targetValue = LightGreen,
+        initialValue = MaterialTheme.colorScheme.primary,
+        targetValue = MaterialTheme.colorScheme.secondary,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 2000),
             repeatMode = RepeatMode.Reverse),
@@ -131,7 +126,7 @@ fun DetailScreenTopBar(
         modifier = Modifier
             .background(
                 brush = Brush.linearGradient(
-                    colors = listOf(OceanBlue, LightGreen)
+                    colors = listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)
                 )
             ),
         navigationIcon = {
@@ -158,7 +153,7 @@ fun ErrorScreen (
         modifier = Modifier
             .padding(bottom = 16.dp)
             .size(160.dp),
-        tint = OceanBlue.copy(alpha = 0.7f),
+        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
     )   
 
     Text(
@@ -166,8 +161,8 @@ fun ErrorScreen (
         Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth(),
-        color = ErrorRed,
-        fontSize = 18.sp,
+        color = MaterialTheme.colorScheme.error,
+        style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center
     )
 

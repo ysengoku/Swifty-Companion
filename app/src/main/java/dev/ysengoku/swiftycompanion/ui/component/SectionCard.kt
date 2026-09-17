@@ -28,13 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.ysengoku.swiftycompanion.ui.theme.LightGreen
-import dev.ysengoku.swiftycompanion.ui.theme.OceanBlue
 
 object SectionCardDefaults {
     @Composable
     fun colors() = CardDefaults.cardColors(
-        containerColor = LightGreen.copy(alpha = 0.05f),
+        containerColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.05f),
     )
 }
 
@@ -61,7 +59,7 @@ fun SectionCard(
         ) {
             Text(
                 "${title}: ",
-                color = OceanBlue,
+                color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .weight(1f)
@@ -87,7 +85,7 @@ private fun ExpandIcon(expanded: Boolean) {
     )
     Icon(
         imageVector = Icons.Default.KeyboardArrowDown,
-        tint = OceanBlue.copy(alpha = 0.5f),
+        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
         contentDescription = if (expanded) "¨Collapse" else "Expand",
         modifier = Modifier
             .rotate(rotation)

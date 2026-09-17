@@ -1,5 +1,6 @@
 package dev.ysengoku.swiftycompanion.ui.detail
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material3.Badge
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -40,15 +40,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import dev.ysengoku.swiftycompanion.R
-import dev.ysengoku.swiftycompanion.ui.theme.ErrorRed
 import dev.ysengoku.swiftycompanion.ui.theme.Green
-import dev.ysengoku.swiftycompanion.ui.theme.LightGreen
-import dev.ysengoku.swiftycompanion.ui.theme.OceanBlue
 
 @Composable
 @Suppress("FunctionName")
@@ -102,8 +99,6 @@ fun LazyListScope.ProfileHeader(
                 Text(
                     displayname,
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .padding(top = 8.dp)
                 )
                 Text(
                     title,
@@ -125,8 +120,19 @@ private fun ProfilePicture(imagePath: String?) {
         model = imagePath,
         contentDescription = "Profile picture",
         modifier = Modifier
-            .size(96.dp)
-            .clip(CircleShape),
+            .size(104.dp)
+            .clip(CircleShape)
+            .border(
+                4.dp,
+                Brush.sweepGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.secondary,
+                        MaterialTheme.colorScheme.primary,
+                        MaterialTheme.colorScheme.secondary
+                    )
+                ),
+                CircleShape
+            ),
         contentScale = ContentScale.Crop,
         error = painterResource(id = R.drawable.default_picture)
     )
@@ -139,13 +145,13 @@ private fun Campus(campus: CampusUi) {
             Icons.Default.LocationOn,
             contentDescription = null,
             modifier = Modifier.size(14.dp),
-            tint = OceanBlue
+            tint = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             "${campus.name}, ${campus.country}",
             style = MaterialTheme.typography.labelMedium,
-            color = OceanBlue
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -163,12 +169,12 @@ private fun Groups(groups: List<String>) {
 @Composable
 private fun GroupBadge(label: String) {
     Surface(
-        color = LightGreen.copy(alpha = 0.2f),
+        color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
         shape = RoundedCornerShape(20)
     ) {
         Text(
             label,
-            color = OceanBlue,
+            color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp)
         )
@@ -194,7 +200,7 @@ fun LazyListScope.CursusInfo(
                     "Grade:  ",
                     style = MaterialTheme.typography.labelSmall
                 )
-                Text(selectedCursus.grade ?: "N/A", fontSize = 14.sp)
+                Text(selectedCursus.grade ?: "N/A")
             }
             Spacer(modifier = Modifier.size(16.dp))
             CursusLevel(selectedCursus.level, selectedCursus.percentage)
@@ -217,11 +223,7 @@ private fun CursusSelector(
             style = MaterialTheme.typography.labelSmall
         )
         if (cursus.size == 1) {
-            Text(
-                cursusName,
-                style = MaterialTheme.typography.bodyMedium,
-                lineHeight = 18.sp
-            )
+            Text(cursusName)
         } else {
             ExposedDropdownMenuBox(
                 expanded = expanded,
@@ -236,7 +238,6 @@ private fun CursusSelector(
                         value = cursusName,
                         onValueChange = {},
                         readOnly = true,
-                        textStyle = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.weight(1f, fill = false)
                     )
                     ExposedDropdownMenuDefaults.TrailingIcon(
@@ -250,11 +251,7 @@ private fun CursusSelector(
                 ) {
                     cursus.forEach { c ->
                         DropdownMenuItem(
-                            text = {
-                                Text(
-                                    c.name,
-                                    style = MaterialTheme.typography.bodyMedium
-                                )},
+                            text = { Text( c.name) },
                             onClick = {
                                 onCursusSelected(c)
                                 expanded = false
@@ -275,15 +272,15 @@ private fun CursusLevel(
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             "Level ${level}",
-            color = OceanBlue,
+            color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.titleMedium
         )
-        Text("  -  ${percentage} %", fontSize = 14.sp)
+        Text("  -  ${percentage} %")
     }
     LinearProgressIndicator(
         progress = { percentage / 100f },
-        color = OceanBlue,
-        trackColor = LightGreen.copy(alpha = 0.1f),
+        color = MaterialTheme.colorScheme.primary,
+        trackColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f),
         strokeCap = StrokeCap.Round,
         modifier = Modifier
             .fillMaxWidth()
@@ -326,7 +323,7 @@ private fun ProjectRow(project: ProjectUi) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
     ) {
         Text(
             project.name,
@@ -339,12 +336,12 @@ private fun ProjectRow(project: ProjectUi) {
                 if (project.validated) Icons.Default.Check else Icons.Default.Close,
                 contentDescription = null,
                 modifier = Modifier.size(14.dp),
-                tint = if (project.validated) Green else ErrorRed
+                tint = if (project.validated) Green else MaterialTheme.colorScheme.error
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 project.finalMark.toString(),
-                color = if (project.validated) Green else ErrorRed,
+                color = if (project.validated) Green else MaterialTheme.colorScheme.error,
                 modifier = Modifier
                     .padding(end = 8.dp)
             )
@@ -383,12 +380,12 @@ private fun SkillRow(skill: SkillUi) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 8.dp)
+            .padding(bottom = 12.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp)
+                .padding(top = 4.dp)
         ) {
             Text(
                 skill.name,
@@ -405,12 +402,12 @@ private fun SkillRow(skill: SkillUi) {
         LinearProgressIndicator(
             progress = { skill.level / 20f },
             color = Green,
-            trackColor = LightGreen.copy(alpha = 0.1f),
+            trackColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp, start = 16.dp, end = 16.dp)
                 .height(4.dp)
         )
-        Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(4.dp))
     }
 }
