@@ -87,7 +87,7 @@ private fun ExpandIcon(expanded: Boolean) {
     )
     Icon(
         imageVector = Icons.Default.KeyboardArrowDown,
-        tint = OceanBlue,
+        tint = OceanBlue.copy(alpha = 0.5f),
         contentDescription = if (expanded) "¨Collapse" else "Expand",
         modifier = Modifier
             .rotate(rotation)

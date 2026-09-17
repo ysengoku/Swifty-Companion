@@ -10,6 +10,7 @@ data class User (
     @SerializedName("campus_users") val campusUsers: List<CampusUser>,
     val titles: List<Title>,
     @SerializedName("titles_users") val titlesUsers: List<TitleUser>,
+    val groups: List<Group>,
     @SerializedName("cursus_users") val cursusUsers: List<CursusUser>,
     @SerializedName("projects_users") val projectsUsers: List<ProjectUser>
 )
@@ -45,6 +46,11 @@ data class Title(
 data class TitleUser(
     @SerializedName("title_id") val titleId: Int,
     val selected: Boolean
+)
+
+data class Group(
+    val id: Int,
+    val name: String
 )
 
 data class CursusUser(

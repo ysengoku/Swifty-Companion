@@ -8,6 +8,7 @@ data class DetailUiModel (
     val campus: CampusUi,
     // Only the currently selected title (titles_users.selected == true) is shown
     val title: String?,
+    val groups: List<String>,
     val cursus: List<CursusUi>,
     val projects: List<ProjectUi>,
 )

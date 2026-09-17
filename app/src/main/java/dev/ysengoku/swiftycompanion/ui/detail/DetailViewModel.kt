@@ -83,6 +83,7 @@ class DetailViewModel (
             user.displayname,
             resolveCampus(user.campus, user.campusUsers),
             resolveTitle(user.titles, user.titlesUsers, user.login),
+            user.groups.map { it.name },
             mapCursus(user.cursusUsers),
             mapProjects(user.projectsUsers),
         )
