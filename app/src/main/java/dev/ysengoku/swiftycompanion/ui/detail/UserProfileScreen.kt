@@ -244,10 +244,20 @@ fun LazyListScope.ProjectList(
 
     item {
         SectionCard(
-            title = "Projects"
+            title = "Projects",
+            showExpandIcon = filtered.isNotEmpty(),
         ) {
-            filtered.forEachIndexed { index, project ->
-                ProjectRow(project)
+            if (filtered.isNotEmpty()) {
+                filtered.forEachIndexed { index, project ->
+                    ProjectRow(project)
+                }
+            } else {
+                Text(
+                    "No projects completed yet.",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, bottom = 8.dp)
+                )
             }
         }
     }
@@ -291,10 +301,20 @@ fun LazyListScope.SkillList(
 ) {
     item {
         SectionCard(
-            title = "Skills"
+            title = "Skills",
+            showExpandIcon = skills.isNotEmpty(),
         ) {
-            skills.forEachIndexed { index, skill ->
-                SkillRow(skill)
+            if (skills.isNotEmpty()) {
+                skills.forEachIndexed { index, skill ->
+                    SkillRow(skill)
+                }
+            } else {
+                Text(
+                    "No skills yet",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, bottom = 8.dp)
+                )
             }
         }
     }

@@ -42,6 +42,7 @@ object SectionCardDefaults {
 fun SectionCard(
     modifier: Modifier = Modifier,
     title: String,
+    showExpandIcon: Boolean,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Card(
@@ -65,7 +66,9 @@ fun SectionCard(
                 modifier = Modifier
                     .weight(1f)
             )
-            ExpandIcon(expanded)
+            if (showExpandIcon) {
+                ExpandIcon(expanded)
+            }
         }
 
         if (expanded) {
