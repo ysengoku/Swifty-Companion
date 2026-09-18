@@ -38,7 +38,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.ysengoku.swiftycompanion.ui.theme.BlueWhite
+import dev.ysengoku.swiftycompanion.ui.theme.BrandGradient
 import dev.ysengoku.swiftycompanion.R
+import dev.ysengoku.swiftycompanion.ui.theme.LightColorScheme
 
 @Composable
 fun DetailScreen (
@@ -125,9 +127,7 @@ fun DetailScreenTopBar(
         },
         modifier = Modifier
             .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)
-                )
+                brush = BrandGradient
             ),
         navigationIcon = {
             IconButton(onClick = onBack) {
@@ -166,11 +166,13 @@ fun ErrorScreen (
         textAlign = TextAlign.Center
     )
 
-    Button(
-        onClick = onBack,
-        Modifier
-            .padding(top = 16.dp),
-    ) {
-        Text("Back to Search Form")
+    MaterialTheme(colorScheme = LightColorScheme) {
+        Button(
+            onClick = onBack,
+            Modifier
+                .padding(top = 16.dp),
+        ) {
+            Text("Back to Search Form")
+        }
     }
 }

@@ -9,20 +9,22 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = OceanBlue,
+    primary = BabyBlueEyes,
     onPrimary = BlueWhite,
     secondary = LightGreen,
     onSecondary = Navy,
     tertiary = Navy,
     onTertiary = BlueWhite,
-    error = ErrorRed,
+    error = ErrorRedDark,
     onError = BlueWhite
 )
 
-private val LightColorScheme = lightColorScheme(
+val LightColorScheme = lightColorScheme(
     primary = OceanBlue,
     onPrimary = BlueWhite,
     secondary = LightGreen,
@@ -30,8 +32,14 @@ private val LightColorScheme = lightColorScheme(
     tertiary = Navy,
     onTertiary = BlueWhite,
     error = ErrorRed,
-    onError = BlueWhite
+    onError = BlueWhite,
 )
+
+val LocalExtendedColors = staticCompositionLocalOf { LightExtendedColors }
+
+val MaterialTheme.extendedColors: ExtendedColors
+    @Composable
+    get() = LocalExtendedColors.current
 
 @Composable
 fun SwiftyCompanionTheme(
@@ -45,14 +53,17 @@ fun SwiftyCompanionTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    val extendedColors = if (darkTheme) DarkExtendedColors else LightExtendedColors
+
+    CompositionLocalProvider(LocalExtendedColors provides extendedColors) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = Typography,
+            content = content
+        )
+    }
 }

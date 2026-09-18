@@ -26,6 +26,8 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,7 +47,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import dev.ysengoku.swiftycompanion.R
-import dev.ysengoku.swiftycompanion.ui.theme.Green
+import dev.ysengoku.swiftycompanion.ui.theme.extendedColors
 
 @Composable
 @Suppress("FunctionName")
@@ -236,6 +238,9 @@ private fun CursusSelector(
                 ) {
                     BasicTextField(
                         value = cursusName,
+                        textStyle = LocalTextStyle.current.copy(
+                            color = LocalContentColor.current
+                        ),
                         onValueChange = {},
                         readOnly = true,
                         modifier = Modifier.weight(1f, fill = false)
@@ -251,7 +256,7 @@ private fun CursusSelector(
                 ) {
                     cursus.forEach { c ->
                         DropdownMenuItem(
-                            text = { Text( c.name) },
+                            text = { Text(c.name) },
                             onClick = {
                                 onCursusSelected(c)
                                 expanded = false
@@ -332,16 +337,17 @@ private fun ProjectRow(project: ProjectUi) {
                 .padding(start = 8.dp, end = 4.dp)
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
+            val color = if (project.validated) MaterialTheme.extendedColors.success else MaterialTheme.colorScheme.error
             Icon(
                 if (project.validated) Icons.Default.Check else Icons.Default.Close,
                 contentDescription = null,
                 modifier = Modifier.size(14.dp),
-                tint = if (project.validated) Green else MaterialTheme.colorScheme.error
+                tint = color
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 project.finalMark.toString(),
-                color = if (project.validated) Green else MaterialTheme.colorScheme.error,
+                color = color,
                 modifier = Modifier
                     .padding(end = 8.dp)
             )
@@ -401,7 +407,7 @@ private fun SkillRow(skill: SkillUi) {
         }
         LinearProgressIndicator(
             progress = { skill.level / 20f },
-            color = Green,
+            color = MaterialTheme.extendedColors.success,
             trackColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f),
             modifier = Modifier
                 .fillMaxWidth()
