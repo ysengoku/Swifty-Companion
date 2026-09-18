@@ -48,11 +48,7 @@
 
 Swifty Companion is an Android app built for the 42 curriculum. Given a 42 login, it looks up that student through the 42 Intra API and displays their profile information.
 
-<div align="center" >
-  <video controls autoplay width="40%">
-  <source src="./doc/assets/demo.mp4" type="video/webm" />
-  </video>
-</div>
+https://github.com/user-attachments/assets/b66075f1-97d5-4b8e-8156-597a4218b17d
 
 ## Objectives
 
@@ -125,7 +121,8 @@ sequenceDiagram
 The detail screen receives only a login as its navigation argument and fetches the user itself, rather than the search screen fetching first and passing the result along.   
 This keeps the two screens independent: the detail screen works the same way regardless of how it's opened, and there's only one place holding the user's data.   
 
->[!NOTE] The trade-off is that a login that doesn't exist isn't caught until the detail screen is entered, so it shows a loading state briefly before the error, rather than failing on the search screen itself.
+>[!NOTE]
+> The trade-off is that a login that doesn't exist isn't caught until the detail screen is entered, so it shows a loading state briefly before the error, rather than failing on the search screen itself.
 
 **State management:**
 
