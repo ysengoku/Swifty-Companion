@@ -1,8 +1,6 @@
 # Swifty Companion
 
-<!-- Add image or use below -->
-<img src="https://capsule-render.vercel.app/api?type=venom&height=300&color=0:61baf8,100:256082&text=Swifty%20Companion&fontColor=ae3855&animation=fadeIn&textBg=false&stroke=e995a4&strokeWidth=1&desc=Short%20description&descSize=18&descAlignY=66" width="100%" />
-<!-- <img src="" width="100%" /> -->
+<img src="./doc/assets/swifty-companion.png" width="100%" />
 
 <div align="center">
   <!-- <img src="https://img.shields.io/badge/validated-125/100-brightgreen?style=for-the-badge&logo=cachet" /> -->
@@ -50,6 +48,12 @@
 
 Swifty Companion is an Android app built for the 42 curriculum. Given a 42 login, it looks up that student through the 42 Intra API and displays their profile information.
 
+<div align="center" >
+  <video controls autoplay width="40%">
+  <source src="./doc/assets/demo.mp4" type="video/webm" />
+  </video>
+</div>
+
 ## Objectives
 
 This project served as an introduction to mobile app development, from picking up the language and tooling to integrating with an external, authenticated API.
@@ -59,6 +63,17 @@ This project served as an introduction to mobile app development, from picking u
 - Search for a 42 student by login and view their profile: picture, displayname, login, title, campus and groups, alongside their level, completed projects and skills in selected cursus.
 - Switch between the student's cursus to browse the skills and projects for each one
 - OAuth2 authentication handled transparently, including automatic token refresh
+
+<div align="center">
+  <img src="./doc/assets/Screenshot_1.png" width="20%" />
+  <img src="./doc/assets/Screenshot_2.png" width="20%" />
+  <img src="./doc/assets/Screenshot_3.png" width="20%" />
+  <img src="./doc/assets/Screenshot_4.png" width="20%" />
+  <img src="./doc/assets/Screenshot_5.png" width="20%" />
+  <img src="./doc/assets/Screenshot_6.png" width="20%" />
+  <img src="./doc/assets/Screenshot_7.png" width="20%" />
+  <img src="./doc/assets/Screenshot_8.png" width="20%" />
+</div>
 
 ## Architecture
 
