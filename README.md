@@ -32,13 +32,9 @@
   - [Installation](#installation)
   - [Usage](#usage)
 - [Development](#development)
-  - [Workflow](#workflow)
-  - [Linting & Formatting](#linting--formatting)
   - [Testing](#testing)
   - [Debugging](#debugging)
-- [Notes](#notes)
 - [Resources](#resources)
-- [AI Usage](#ai-usage)
 - [Authors](#authors)
 - [License](#license)
 
@@ -357,6 +353,7 @@ object IntraApi {
 - [Kotlin docs](https://kotlinlang.org/docs/home.html)
 - [Meet Android Studio](https://developer.android.com/studio/intro)
 - [Get started with Jetpack Compose](https://developer.android.com/develop/ui/compose/documentation)
+- [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/)
 
 ## Authors
 
