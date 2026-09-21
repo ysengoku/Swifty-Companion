@@ -56,14 +56,14 @@ fun UserProfileScreen (
     selectedCursusId: Int?
 ) {
     var selectedCursus by remember(user, selectedCursusId) {
-        mutableStateOf(user.cursus.find { it.id == selectedCursusId } ?: user.cursus.first())
+        mutableStateOf(user.cursus.find { it.id == selectedCursusId } ?: user.cursus.firstOrNull())
     }
 
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally 
     ) {
         ProfileHeader(
             user.image,
@@ -79,9 +79,9 @@ fun UserProfileScreen (
         )
         ProjectList(
                 projects = user.projects,
-                selectedCursusId = selectedCursus.id
+                selectedCursusId = selectedCursus?.id
         )
-        SkillList(skills = selectedCursus.skills)
+        SkillList(skills = selectedCursus?.skills ?: listOf<SkillUi>())
     }
 }
 
@@ -187,7 +187,7 @@ private fun GroupBadge(label: String) {
 @Suppress("FunctionName")
 fun LazyListScope.CursusInfo(
     cursus: List<CursusUi>,
-    selectedCursus: CursusUi,
+    selectedCursus: CursusUi?,
     onCursusSelected: (CursusUi) -> Unit
 ) {
     item {
@@ -196,16 +196,18 @@ fun LazyListScope.CursusInfo(
                 .fillMaxWidth()
                 .padding(top = 16.dp)
         ) {
-            CursusSelector(cursus, selectedCursus.name, onCursusSelected)
+            CursusSelector(cursus, selectedCursus?.name, onCursusSelected)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     "Grade:  ",
                     style = MaterialTheme.typography.labelSmall
                 )
-                Text(selectedCursus.grade ?: "N/A")
+                Text(selectedCursus?.grade ?: "N/A")
             }
             Spacer(modifier = Modifier.size(16.dp))
-            CursusLevel(selectedCursus.level, selectedCursus.percentage)
+            if (selectedCursus != null) {
+                CursusLevel(level = selectedCursus.level, percentage = selectedCursus.percentage)
+            }
         }
     }
 }
@@ -214,7 +216,7 @@ fun LazyListScope.CursusInfo(
 @Composable
 private fun CursusSelector(
     cursus: List<CursusUi>,
-    cursusName: String,
+    cursusName: String?,
     onCursusSelected: (CursusUi) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -224,8 +226,10 @@ private fun CursusSelector(
             "Cursus:  ",
             style = MaterialTheme.typography.labelSmall
         )
-        if (cursus.size == 1) {
-            Text(cursusName)
+        if (cursus.isEmpty()) {
+            Text("No cursus")
+        } else if (cursus.size == 1) {
+            Text(cursusName ?: "")
         } else {
             ExposedDropdownMenuBox(
                 expanded = expanded,
@@ -237,7 +241,7 @@ private fun CursusSelector(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     BasicTextField(
-                        value = cursusName,
+                        value = cursusName ?: "",
                         textStyle = LocalTextStyle.current.copy(
                             color = LocalContentColor.current
                         ),

@@ -77,10 +77,12 @@ fun SearchScreen(
                         Icon(Icons.Default.Search, contentDescription = null)
                     }
                 )
-            
+
+                val login = text.trim().lowercase()
                 Button(
-                    onClick = { if (text.isNotBlank()) onSubmit(text) },
-                    Modifier
+                    onClick = { onSubmit(login) },
+                    enabled = login.isNotEmpty(),
+                    modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(top = 16.dp),
                 ) {

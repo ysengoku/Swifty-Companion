@@ -143,7 +143,10 @@ class DetailViewModel (
         }
     }
     
-    private fun resolveSelectedCursusId(cursusUsers: List<CursusUser>): Int {
+    private fun resolveSelectedCursusId(cursusUsers: List<CursusUser>): Int? {
+        if (cursusUsers.isEmpty()) {
+            return null
+        }
         val fortyTwoCursus = cursusUsers.find { it.cursus.name == "42cursus" }
         return fortyTwoCursus?.cursus?.id ?: requireNotNull(cursusUsers.maxByOrNull { it.beginAt }).cursus.id
     }
