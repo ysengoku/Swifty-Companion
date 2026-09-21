@@ -281,8 +281,15 @@ adb wait-for-device
 **Run on a medium_tablet size emulator:**   
 Close the medium_phone emulator first. Running both at once is heavy on the host machine.
 ```bash
+if ! emulator -list-avds | grep -qx "medium_tablet"; then
+  echo no | avdmanager create avd -n "medium_tablet" \
+    -k "system-images;android-37.0;google_apis_playstore_ps16k;x86_64" \
+    -d "medium_tablet"
+fi
+
 emulator -avd medium_tablet &
 adb wait-for-device
+adb shell 'while [ "$(getprop sys.boot_completed)" != "1" ]; do sleep 1; done'
 ./gradlew installDebug
 ```
 

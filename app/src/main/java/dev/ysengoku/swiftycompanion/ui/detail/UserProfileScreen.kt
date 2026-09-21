@@ -400,7 +400,7 @@ private fun SkillRow(skill: SkillUi) {
                     .padding(start = 16.dp)
             )
             Text(
-                skill.level.toString(),
+                "%.2f".format(skill.level),
                 modifier = Modifier
                     .padding(end = 16.dp)
             )
