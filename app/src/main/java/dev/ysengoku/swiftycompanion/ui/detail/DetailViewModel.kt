@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import java.io.IOException
+import java.math.BigDecimal
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -114,7 +115,7 @@ class DetailViewModel (
                 it.cursus.name,
                 it.grade,
                 it.level.toInt(),
-                ((it.level % 1) * 100).toInt(),
+                it.level.remainder(BigDecimal.ONE).movePointRight(2).toInt(),
                 mapSkill(it.skills)
             )
         }

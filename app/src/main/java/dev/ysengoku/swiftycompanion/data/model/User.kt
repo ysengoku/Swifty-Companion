@@ -1,6 +1,7 @@
 package dev.ysengoku.swiftycompanion.data.model
 
 import com.google.gson.annotations.SerializedName
+import java.math.BigDecimal
 
 data class User (
     val login: String,
@@ -56,7 +57,7 @@ data class Group(
 data class CursusUser(
     @SerializedName("cursus_id") val cursusId: Int,
     val grade: String?,
-    val level: Double,
+    val level: BigDecimal,
     val cursus: Cursus,
     val skills: List<Skill>,
     @SerializedName("begin_at") val beginAt: String
