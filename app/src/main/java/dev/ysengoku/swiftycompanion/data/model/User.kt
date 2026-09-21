@@ -56,7 +56,7 @@ data class Group(
 data class CursusUser(
     @SerializedName("cursus_id") val cursusId: Int,
     val grade: String?,
-    val level: Float,
+    val level: Double,
     val cursus: Cursus,
     val skills: List<Skill>,
     @SerializedName("begin_at") val beginAt: String
