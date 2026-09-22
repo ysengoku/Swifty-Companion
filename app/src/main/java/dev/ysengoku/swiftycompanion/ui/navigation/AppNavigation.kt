@@ -19,7 +19,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
     ) {
         composable("search") {
             SearchScreen(onSubmit = { login ->
-                navController.navigate("detail/$login")
+                val encodedLogin = Uri.encode(login)
+                navController.navigate("detail/$encodedLogin")
             })
         }
         composable("detail/{login}") { backStackEntry ->
