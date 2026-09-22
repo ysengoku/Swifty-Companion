@@ -3,7 +3,7 @@
 <img src="./doc/assets/swifty-companion.png" width="100%" />
 
 <div align="center">
-  <!-- <img src="https://img.shields.io/badge/validated-125/100-brightgreen?style=for-the-badge&logo=cachet" /> -->
+  <img src="https://img.shields.io/badge/validated-110/100-brightgreen?style=for-the-badge&logo=cachet" />
   <br />
   <em>  
     This project was created as part of the 42 curriculum by <a href="https://github.com/ysengoku">yusengok</a>.
